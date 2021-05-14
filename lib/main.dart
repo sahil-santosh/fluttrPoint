@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_catalog/home_page.dart';
+import 'package:flutter_catalog/pages/home_page.dart';
+import 'package:flutter_catalog/pages/login_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +12,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage()
+      // home: HomePage(),          // you can define HomePage() here
+      themeMode: ThemeMode.light,   // akele ye likhne se kuch nhi hoga hume darkTheme bhi dena padega then it works
+      theme: ThemeData(primaryColor: Colors.deepPurple),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      initialRoute: "/login",//when we run app by deafult we saw the HomePage() if WE set initial route ,now we saw the login page when app run
+      routes: {
+        "/": (context)=> HomePage(),  //or you can define HomePage() here otherwise this gave you error
+        "/login": (context) => LoginPage(),
+        },  
     );
   }
 }
