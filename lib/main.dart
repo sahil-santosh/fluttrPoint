@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_catalog/pages/home_page.dart';
 import 'package:flutter_catalog/pages/login_page.dart';
+import 'package:flutter_catalog/utilis/routes.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -20,10 +21,11 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.lato().fontFamily,
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      initialRoute: "/login", //when we run app by deafult we saw the HomePage() if WE set initial route ,now we saw the login page when app run
+      initialRoute: "/", //when we run app by deafult we saw the HomePage() if WE set initial route ,now we saw the login page when app run
       routes: {
-        "/": (context) => HomePage(), //or you can define HomePage() here otherwise this gave you error
-        "/login": (context) => LoginPage(),
+        "/": (context) => LoginPage(),
+        MyRoute.homeRoute: (context) => HomePage(), //or you can define HomePage() here otherwise this gave you error
+        MyRoute.loginRoute: (context) => LoginPage(),
       },
     );
   }
