@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.lato().fontFamily,
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      initialRoute: "/", //when we run app by deafult we saw the HomePage() if WE set initial route ,now we saw the login page when app run
+      initialRoute: MyRoute.homeRoute, //when we run app by deafult we saw the HomePage() if WE set initial route ,now we saw the login page when app run
       routes: {
         "/": (context) => LoginPage(),
         MyRoute.homeRoute: (context) => HomePage(), //or you can define HomePage() here otherwise this gave you error
