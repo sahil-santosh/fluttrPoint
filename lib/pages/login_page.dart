@@ -1,3 +1,8 @@
+/*day 6 about form(wrap whole column into form widget) , 
+  form key (create key and put key into form widget), 
+  some changes on inkwell in ontap section: we create a method for this and call this in ontap section,
+  validator 
+*/
 import 'package:flutter/material.dart';
 import 'package:flutter_catalog/utilis/routes.dart';
 
@@ -7,105 +12,125 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String name = ""; //when we type username , we want to show that ahead Welcome
-  bool buttonChanged = false; //use thid boolean in animation
+  String name = "";
+  bool buttonChanged = false;
+
+  final _formKey = GlobalKey<FormState>();
+
+  //build method for on tap section (day6) 
+  movetoHomePage(BuildContext context) async {
+    if(_formKey.currentState!.validate()){
+      setState(() {
+      buttonChanged = true;
+    });
+    await Future.delayed(Duration(seconds: 1));
+    await Navigator.pushNamed(context,MyRoute.homeRoute); //use await before this then put false buttonChanged(day6)
+    setState(() {
+      buttonChanged = false;
+    });
+    }
+    
+  } 
+
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Image.asset(
-              "assets/images/login_image.png",
-              fit: BoxFit.cover,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Welcome $name", //put name string ahead welcome text
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
+        child: Form(
+          key: _formKey, //put form key (day6)
+          child: Column(
+            children: [
+              Image.asset(
+                "assets/images/login_image.png",
+                fit: BoxFit.cover,
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-              child: Column(
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Enter username",
-                      labelText: "Username",
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Welcome $name",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(
+                        hintText: "Enter username",
+                        labelText: "Username",
+                      ),
+                      validator: (value) {
+                        if(value!.isEmpty){
+                          return "Username can not empty";
+                        }
+                        else if(value.length < 3){
+                          return "username must be 3 char long";
+                        }
+                        return null; 
+                      },
+                      onChanged: (value) {
+                        name = value;
+                        setState(() {});
+                      },
                     ),
-                    onChanged: (value) {
-                      //name stirng put equal to value
-                      name = value;
-                      setState(
-                          () {}); //this state will work only statefull widget
-                    },
-                  ),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: "Enter password",
-                      labelText: "Password",
+                    TextFormField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: "Enter password",
+                        labelText: "Password",
+                      ),
+                      validator: (value) {
+                        if(value!.isEmpty){
+                          return "password can not empty";
+                        }
+                        else if(value.length < 6){
+                          return "password must be 6 char long";
+                        }
+                        return null;
+                      },
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-
-                  //login button animated part
-                  //first we have to comment out elevated button and use a container for this button
-                  //when container completed we rape it into inkwell widget otherwise its not tapebell
-                  //for animation we add Animated word before containor and give duration
-                  InkWell(
-                    onTap: () async {
-                      setState(() {
-                        buttonChanged = true;
-                      });
-                      await Future.delayed(Duration(seconds: 1));
-                      Navigator.pushNamed(context, MyRoute.homeRoute);
-                    },
-                    child: AnimatedContainer(
-                      duration: Duration(seconds: 1),
-                      width: buttonChanged ? 50 : 150,
-                      height: 40,
-                      alignment: Alignment.center,
-                      //color: Colors.deepPurple, //if you use box decoration so you do not define color here
-                      child: buttonChanged ? Icon( Icons.done, color: Colors.white,) : Text(
-                              "Login",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.white),
-                            ),
-                      decoration: BoxDecoration(
-                        color: Colors
-                            .deepPurple, //if you use box decoration so you do not define color in container
-                        borderRadius:
-                            BorderRadius.circular(buttonChanged ? 50 : 8),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    InkWell(
+                      onTap:() => movetoHomePage(context), //put this method here (day6)
+                      child: AnimatedContainer(
+                        duration: Duration(seconds: 1),
+                        width: buttonChanged ? 50 : 150,
+                        height: 40,
+                        alignment: Alignment.center,
+                        child: buttonChanged
+                            ? Icon(
+                                Icons.done,
+                                color: Colors.white,
+                              )
+                            : Text(
+                                "Login",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.white),
+                              ),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple,
+                          borderRadius:
+                              BorderRadius.circular(buttonChanged ? 50 : 8),
+                        ),
                       ),
                     ),
-                  ),
-
-                  // ElevatedButton(
-                  //   style: ElevatedButton.styleFrom(
-                  //       minimumSize: Size(150, 30), primary: Colors.purple),
-                  //   child: Text("Login"),
-                  //   onPressed: () {
-                  //     Navigator.pushNamed(context, MyRoute.homeRoute);
-                  //   },
-                  // ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
