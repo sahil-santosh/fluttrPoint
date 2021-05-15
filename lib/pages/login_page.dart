@@ -1,8 +1,3 @@
-/*day 6 about form(wrap whole column into form widget) , 
-  form key (create key and put key into form widget), 
-  some changes on inkwell in ontap section: we create a method for this and call this in ontap section,
-  validator 
-*/
 import 'package:flutter/material.dart';
 import 'package:flutter_catalog/utilis/routes.dart';
 
