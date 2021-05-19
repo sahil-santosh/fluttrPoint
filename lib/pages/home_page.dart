@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:flutter_catalog/models/catalog.dart';
+import 'package:flutter_catalog/pages/home_detail_page.dart';
 import 'package:flutter_catalog/widgets/drawer.dart';
 import 'package:flutter_catalog/widgets/item_widget.dart';
 
@@ -20,10 +21,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   loadData() async {
-    var catalogJson = await rootBundle.loadString("assets/files/catalog.json");
-    var decodeData = jsonDecode(catalogJson);
+    await Future.delayed(Duration(seconds: 2));
+    final catalogJson =
+        await rootBundle.loadString("assets/files/catalog.json");
+    final decodeData = jsonDecode(catalogJson);
     var productsData = decodeData["products"];
-    CatalogModel.items = List.from(productsData).map<Item>((e) => Item.fromMap(e)).toList();
+    CatalogModel.items =
+        List.from(productsData).map<Item>((e) => Item.fromMap(e)).toList();
 
     setState(() {});
   }
@@ -39,16 +43,25 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: MyDrawer(),
       body: Material(
-        child: (CatalogModel.items.isNotEmpty) ? ListView.builder(
-          itemCount: CatalogModel.items.length,
-          // itemCount: dummyList.length,
-          itemBuilder: (context, index) {
-            return ItemWidget(
-              item: CatalogModel.items[index],
-              // item: dummyList[index],
-            );
-          },
-        ): Center(child: CircularProgressIndicator(),),
+        child: (CatalogModel.items.isNotEmpty)
+            ? ListView.builder(
+                itemCount: CatalogModel.items.length,
+                // itemCount: dummyList.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeDetailPage(catalog: CatalogModel.items[index])));
+                    },
+                    child: ItemWidget(
+                      item: CatalogModel.items[index],
+                      // item: dummyList[index],
+                    ),
+                  );
+                },
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
       ),
     );
   }
